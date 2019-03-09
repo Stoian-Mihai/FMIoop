@@ -12,6 +12,11 @@ int main()
 	freopen("GraphInput.txt", "r", stdin);
 	std::cin >> G;
 	std::cout << G;
+	//std::cout << G.isConnected();
+	std::vector<int> toPrint;
+	toPrint = G.dijkstraForNode(1);
+	for (auto i : toPrint)
+		std::cout << i << " ";
 	system("pause");
 	return 0;
 }

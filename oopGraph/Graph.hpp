@@ -11,6 +11,8 @@ public:
 	int getKey();
 	int getCost();
 	friend std::ostream &operator<<(std::ostream &output, const node N);
+	friend bool operator==(node &N, node &M);
+	friend bool operator!=(node &N, node &M);
 };
 class graph
 {
@@ -20,7 +22,13 @@ class graph
 public:
 	friend std::istream &operator>>(std::istream &input, graph &G);
 	friend std::ostream &operator<<(std::ostream &output, const graph G);
+	friend bool operator==(graph &C, graph &G);
+	friend bool operator!=(graph &C, graph &G);
+
 	int getNodes();
 	int getVertices();
+	std::vector< std::vector<int> > getConnectedComponents();
+	bool isConnected();
+	std::vector<int> dijkstraForNode(int startingNode);
 };
 
