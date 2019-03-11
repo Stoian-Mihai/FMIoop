@@ -46,7 +46,7 @@ std::istream &operator>>(std::istream &input, graph &G)
 	{
 		input >> a >> c >> b;
 		G.m_adjList[a].push_back(node(b, c));
-		//G.m_adjList[b].push_back(node(a, c));
+		G.m_adjList[b].push_back(node(a, c));
 	}
 	return input;
 }
@@ -99,6 +99,18 @@ bool operator!=(graph &C, graph &G)
 {
 	if (C == G) return 0;
 	return 1;
+}
+bool operator<(graph &C, graph &G)
+{
+	if (C.m_nodes < G.m_nodes) return 1;
+	if (C.m_nodes > G.m_nodes) return -1;
+	return 0;
+}
+bool operator>(graph &C, graph &G)
+{
+	if (C.m_nodes > G.m_nodes) return 1;
+	if (C.m_nodes < G.m_nodes) return -1;
+	return 0;
 }
 //getters
 int graph::getNodes()
@@ -158,7 +170,7 @@ std::vector<int> graph::dijkstraForNode(int startingNode)
 	for (int i = 0; i <= this->m_nodes; i++)
 		minimumCostVect.push_back(INT_MAX);
 	minimumCostVect[startingNode] = 0;
-	//putting the startingNode in a priorityQueue
+	//putting the startingNode in a priority queue
 	std::priority_queue <int> pQueue;
 	pQueue.push(startingNode);
 
@@ -166,8 +178,10 @@ std::vector<int> graph::dijkstraForNode(int startingNode)
 	{
 		int curentNode = pQueue.top();
 		pQueue.pop();
+		//looping through curentNode adjList
 		for (auto nextNode : this->m_adjList[curentNode])
 		{
+			//if we found a cheaper way to get to next node we add that node to priority queue
 			if (nextNode.getCost() + minimumCostVect[curentNode] < minimumCostVect[nextNode.getKey()])
 			{
 				minimumCostVect[nextNode.getKey()] = nextNode.getCost() + minimumCostVect[curentNode];
@@ -175,6 +189,24 @@ std::vector<int> graph::dijkstraForNode(int startingNode)
 			}
 		}
 	}
-
+	//replacing INT_MAX value with -1 for better readability when printed
+	for (int i = 0; i <= this->m_nodes; i++)
+		if (minimumCostVect[i] == INT_MAX) minimumCostVect[i] = -1;
 	return minimumCostVect;
+}
+std::vector< std::vector<int> > graph::getMinimumCostMatrix()
+{
+	//Using Dijkstra algorithm function I generate a minimum cost array for every node, 
+	//then I will create a matrix.
+	std::vector< std::vector<int> > minMatrix;
+	std::vector<int> padding;
+	//Because I will start the counting from 1 I must add some padding 
+	minMatrix.push_back(padding);
+	for (int i = 1; i <= this->m_nodes; i++)
+	{
+		std::vector<int> minArray;
+		minArray = this->dijkstraForNode(i);
+		minMatrix.push_back(minArray);
+	}
+	return minMatrix;
 }

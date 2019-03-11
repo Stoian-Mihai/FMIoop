@@ -22,13 +22,17 @@ class graph
 public:
 	friend std::istream &operator>>(std::istream &input, graph &G);
 	friend std::ostream &operator<<(std::ostream &output, const graph G);
+	graph &operator=(graph& C);
 	friend bool operator==(graph &C, graph &G);
 	friend bool operator!=(graph &C, graph &G);
-
+	friend bool operator<(graph &C, graph &G);
+	friend bool operator>(graph &C, graph &G);
+	
 	int getNodes();
 	int getVertices();
 	std::vector< std::vector<int> > getConnectedComponents();
 	bool isConnected();
 	std::vector<int> dijkstraForNode(int startingNode);
+	std::vector< std::vector<int> > getMinimumCostMatrix();
 };
 

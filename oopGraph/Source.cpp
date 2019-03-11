@@ -13,10 +13,14 @@ int main()
 	std::cin >> G;
 	std::cout << G;
 	//std::cout << G.isConnected();
-	std::vector<int> toPrint;
-	toPrint = G.dijkstraForNode(1);
-	for (auto i : toPrint)
-		std::cout << i << " ";
+	std::vector<std::vector<int> > toPrint;
+	toPrint = G.getMinimumCostMatrix();
+	for (int i = 1; i <= G.getNodes(); i++)
+	{
+		for (int j = 1; j <= G.getNodes(); j++)
+			std::cout << toPrint[i][j]<<" ";
+		std::cout << "\n";
+	}
 	system("pause");
 	return 0;
 }
