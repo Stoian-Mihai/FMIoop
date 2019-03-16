@@ -17,6 +17,8 @@ public:
 	void operator=(manualVector &);
 	int &operator[] (int);
 	bool empty();
+	void print();
+	int getSize();
 };
 
 class manualVectorNode

@@ -32,10 +32,12 @@ public:
 	node front();
 	void pop();
 	bool empty();
+	void print();
 };
 
 class manualpriorityQueueNode : public manualQueueNode
 {
 public:
 	node top();
+	void pop();
 };

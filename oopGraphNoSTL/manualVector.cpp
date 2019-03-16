@@ -33,6 +33,18 @@ bool manualVector::empty()
 	if (this->count == 0) return 1;
 	return 0;
 }
+void manualVector::print()
+{
+	for (int i = 0; i < this->count; i++)
+	{
+		std::cout << this->v[i] << " ";
+	}
+	std::cout << "\n";
+}
+int manualVector::getSize()
+{
+	return this->count;
+}
 void manualVector::operator=(manualVector &toCopyVect)
 {
 	this->count = 0;
@@ -64,7 +76,7 @@ manualVectorNode::manualVectorNode(const manualVectorNode &toCopyVect)
 manualVectorNode::~manualVectorNode()
 {
 	delete[] v;
-	std::cout << "desctr vector\n";
+	//std::cout << "desctr vector\n";
 }
 void manualVectorNode::pushBack(node x)
 {

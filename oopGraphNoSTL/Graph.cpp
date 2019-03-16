@@ -8,8 +8,32 @@ graph::graph()
 }
 graph::~graph()
 {
-	//delete[] m_adjList;
+	delete[] m_adjList;
 }
+graph::graph(const graph &other)
+{
+	delete[] m_adjList;
+	this->m_adjList = new manualVectorNode[100];
+	this->m_vertices = other.m_vertices;
+	this->m_nodes = other.m_nodes;
+	for(int i=1;i<=m_nodes;i++)
+	{
+		this->m_adjList[i] = other.m_adjList[i];
+	}
+}
+
+void graph::operator=(const graph &other)
+{
+	delete[] m_adjList;
+	this->m_adjList = new manualVectorNode[100];
+	this->m_vertices = other.m_vertices;
+	this->m_nodes = other.m_nodes;
+	for (int i = 1; i <= m_nodes; i++)
+	{
+		this->m_adjList[i] = other.m_adjList[i];
+	}
+}
+
 // Input / Output
 std::istream &operator>>(std::istream &input, graph &G)
 {
@@ -87,6 +111,43 @@ bool operator>(graph &C, graph &G)
 	return 0;
 }
 
+graph operator*(graph& C, graph& G)
+{
+	graph R;
+	R.m_nodes = C.m_nodes;
+	R.m_vertices = C.m_vertices;
+
+	for(int i=1;i<=C.m_nodes;i++)
+	{
+		node *Git = G.m_adjList[i].begin();
+		for(auto Cit : C.m_adjList[i])
+		{
+			if(Cit.getKey() == Git->getKey())
+			{
+				if(Cit.getCost() < Git->getCost())
+				{
+					R.m_adjList[i].pushBack(Cit);
+				}
+				else
+				{
+					R.m_adjList[i].pushBack(*Git);
+				}
+			}
+		}
+	}
+	return R;
+}
+
+//getters
+int graph::getNodes()
+{
+	return m_nodes;
+}
+int graph::getVertices()
+{
+	return m_vertices;
+}
+
 manualVector*  graph::getConnectedComponents()
 {
 	manualVector *conComponents;
@@ -153,7 +214,81 @@ int graph::getNumberOfConnectedComponents()
 	}
 	return k;
 }
-void graph::dijkstraForNode(int startingNode)
+
+manualVector graph::minimumSpanningTree()
+{
+	// picking starting vertex
+	int startingNode = 1;
+	manualpriorityQueueNode Q;
+	manualVector minSpanningTree;
+	int *visited = new int[100];
+	for (int i = 0; i < 100; i++)
+		visited[i] = 0;
+	Q.push(node(1, 0));
+
+	while(!Q.empty())
+	{
+		// picking the minimum cost node
+		int curentNode = Q.top().getKey();
+		Q.pop();
+		//Q.print();
+		if (visited[curentNode] == 1) continue;
+		visited[curentNode] = 1;
+		minSpanningTree.pushBack(curentNode);
+		for (auto nextNode :this->m_adjList[curentNode])
+		{
+			Q.push(nextNode);
+		}
+		
+	}
+	delete[] visited;
+	return minSpanningTree;
+	
+
+}
+
+manualVector graph::pathBetween(int nodeA, int nodeB)
+{
+	// Using disjktra algorithm and a path vector
+	manualVector pathVector;
+	for(int i=0;i<= this->m_nodes;i++)
+	{
+		pathVector.pushBack(-1);
+	}
+	int startingNode = nodeA;
+	pathVector[startingNode] = 0;
+	manualVector minimumCostVect;
+	for (int i = 0; i <= this->m_nodes; i++)
+		minimumCostVect.pushBack(INT_MAX);
+	minimumCostVect[startingNode] = 0;
+
+	manualpriorityQueueNode pQueue;
+	pQueue.push(node(startingNode, 0));
+	while (!pQueue.empty())
+	{
+		int curentNode = pQueue.top().getKey();
+		pQueue.pop();
+		for (auto nextNode : this->m_adjList[curentNode])
+		{
+			if (nextNode.getCost() + minimumCostVect[curentNode] < minimumCostVect[nextNode.getKey()])
+			{
+				minimumCostVect[nextNode.getKey()] = nextNode.getCost() + minimumCostVect[curentNode];
+				pQueue.push(nextNode.getKey());
+				pathVector[nextNode.getKey()] = curentNode;
+			}
+		}
+	}
+	int pathNode = 3;
+	manualVector minimumPath;
+	while(pathNode != 0)
+	{
+		minimumPath.pushBack(pathNode);
+		pathNode = pathVector[pathNode];
+	}
+	return minimumPath;
+}
+
+manualVector graph::dijkstraForNode(int startingNode)
 {
 	//apply the disjktra algorithm from a startingNode to get the minimum
 	//cost to all the nodes in the graph
@@ -167,7 +302,6 @@ void graph::dijkstraForNode(int startingNode)
 	//std::priority_queue <int> pQueue;
 	manualpriorityQueueNode pQueue;
 	pQueue.push(node(startingNode, 0));
-
 	while (!pQueue.empty())
 	{
 		int curentNode = pQueue.top().getKey();
@@ -186,5 +320,28 @@ void graph::dijkstraForNode(int startingNode)
 	//replacing INT_MAX value with -1 for better readability when printed
 	for (int i = 0; i <= this->m_nodes; i++)
 		if (minimumCostVect[i] == INT_MAX) minimumCostVect[i] = -1;
-	
+
+	return minimumCostVect;
+}
+int** graph::getMinimumCostMatrix()
+{
+	//Using Dijkstra algorithm function I generate a minimum cost array for every node, 
+	//then I will create a matrix.
+	int** minMatrix = new int*[100];
+	for (int i = 0; i < 100; i++)
+		minMatrix[i] = new int[100];
+
+	for (int i = 1; i <= this->m_nodes; i++)
+	{
+		
+		manualVector minArray = this->dijkstraForNode(i);
+		minArray.print();
+		minMatrix[i][0] = minArray.getSize();
+		int k = 0;
+		for(auto j  : minArray)
+		{
+			minMatrix[i][++k] = j;
+		}
+	}
+	return minMatrix;
 }

@@ -64,7 +64,17 @@ node manualQueueNode::front()
 }
 bool manualQueueNode::empty()
 {
-	return 1;
+	if (this->first == this->count) return 1;
+	return 0;
+}
+
+void manualQueueNode::print()
+{
+	for(int i = this->first; i<= this->first + this->count; i++)
+	{
+		std::cout << this->v[i]<<" ";
+	}
+	std::cout << "\n";
 }
 
 // for priority queue
@@ -76,4 +86,16 @@ node manualpriorityQueueNode::top()
 		if (this->v[i] < maxNode) maxNode = this->v[i];
 	}
 	return maxNode;
+}
+void manualpriorityQueueNode::pop()
+{
+	node maxNode = this->top();
+	for (int i = this->first; i < this->first + this->count; i++)
+	{
+		if (this->v[i] == maxNode)
+		{
+			this->v[i] = this->v[first++];
+			break;
+		}
+	}
 }

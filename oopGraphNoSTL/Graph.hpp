@@ -18,21 +18,24 @@ class graph
 public:
 	graph();
 	~graph();
+	graph(const graph &);
 	friend std::istream &operator>>(std::istream &input, graph &G);
 	friend std::ostream &operator<<(std::ostream &output, const graph G);
-	graph &operator=(graph& C);
+	void operator=(const graph &);
 	friend bool operator==(graph &C, graph &G);
 	friend bool operator!=(graph &C, graph &G);
 	friend bool operator<(graph &C, graph &G);
 	friend bool operator>(graph &C, graph &G);
-
+	friend graph operator*(graph &C, graph &G);
 	int getNodes();
 	int getVertices();
 	manualVector* getConnectedComponents();
 	bool isConnected();
-	void dijkstraForNode(int startingNode);
-	std::vector< std::vector<int> > getMinimumCostMatrix();
+	manualVector dijkstraForNode(int startingNode);
+	int** getMinimumCostMatrix();
 	int getNumberOfConnectedComponents();
+	manualVector minimumSpanningTree();
+	manualVector pathBetween(int nodeA, int nodeB);
 };
 
 #endif

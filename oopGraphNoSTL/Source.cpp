@@ -12,16 +12,29 @@ void connectedComponentsTest(graph &G)
 	}
 	
 }
+void dijkstraTest(graph &G)
+{
+	manualVector minCost = G.dijkstraForNode(1);
+	minCost.print();
+}
+void minMatrixTest(graph &G)
+{
+	int** matrix = G.getMinimumCostMatrix();
+	int n = G.getNodes();
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= n; j++)
+			std::cout << matrix[i][j] << " ";
+		std::cout << "\n";
+	}
+
+	
+}
 int main()
 {
 	graph G;
 	freopen("GraphInput.txt", "r", stdin);
 	std::cin >> G;
-	std::cout << G;
-	connectedComponentsTest(G);
-	
-	int a;
-	a = 5;
 	system("pause");
 	return 0;
 }
