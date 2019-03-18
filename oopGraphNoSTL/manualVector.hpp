@@ -23,10 +23,10 @@ public:
 
 class manualVectorNode
 {
-public:
+
 	int count = 0;
 	node *v;
-
+public:
 	manualVectorNode();
 	manualVectorNode(const manualVectorNode &);
 	~manualVectorNode();
