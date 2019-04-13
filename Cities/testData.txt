@@ -1,0 +1,4 @@
+3
+1 1 Domnesti 1500
+2 2000 2 Brasov 15000
+3 Iohanis 20000  3 Bucuresti 6000000
