@@ -1,15 +1,9 @@
-2
 GameOfThrones aventura 60 3
 1 Kit 1234 GameOfThrones principal 3
 2 Miguel 1235 GameOfThrones 100000
 3 cgi 1236 GameOfThrones efecteSpeciale 1
-2
-BucurestiAfi 50000
-BucurestiMMall 100000
+
 AvengersEndgame actiune 180 3
 1 Robert 1237 AvengersEndgame principal 5
 2 Russo 1238 AvengersEndgame 100000
 3 Alan 1239 AvengersEndgame Muzica 1
-2
-BucurestiAfi 50000
-BucurestiMMall 100000

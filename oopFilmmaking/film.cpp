@@ -3,14 +3,14 @@
 using namespace  std;
 
 
-film::film(){}
+film::film():curentID(ID()){}
 
-film::film(string nume, string tip, int durata, vector<personal> pers)
+film::film(string nume, string tip, int durata, vector<cinematograf> cinematografe) : curentID(ID())
 {
 	this->nume = nume;
 	this->tip = tip;
 	this->durata = durata;
-	//this->pers = pers;
+	this->cinematografe = cinematografe;
 }
 
 film::~film()
@@ -50,25 +50,37 @@ void film::read(istream &input)
 		cout << "1 - actor, 2 - regizor, 3 - personalTehnic\n";
 		int option;
 		input >> option;
-
-		switch (option)
-		{
-		case 1:
-			a = new actor;
-			input >> *a;
-			pers.push_back(a);
-			break;
-		case 2:
-			r = new regizor;
-			input >> *r;
-			pers.push_back(r);
-			break;
-		case 3:
-			p = new personalTehnic;
-			input >> *p;
-			pers.push_back(p);
-			break;
+		try{
+			if (option > 3 || option < 1) throw option;
+			switch (option)
+			{
+			case 1:
+				a = new actor;
+				input >> *a;
+				pers.push_back(a);
+				break;
+			case 2:
+				r = new regizor;
+				input >> *r;
+				pers.push_back(r);
+				break;
+			case 3:
+				p = new personalTehnic;
+				input >> *p;
+				pers.push_back(p);
+				break;
+			}
+		}catch(int option){
+			cout << "optiunea " << option << " este invalida";
 		}
+	}
+	int nrCinematografe;
+	input >> nrCinematografe;
+	for(int i=1;i<=nrCinematografe;i++)
+	{
+		cinematograf c;
+		input >> c;
+		cinematografe.push_back(c);
 	}
 	
 }
@@ -98,6 +110,30 @@ void film::print(ostream& output)
 		}
 
 	}
+	for (auto it : cinematografe)
+		output << it;
+}
+
+int film::getID()
+{
+	return this->curentID;
+}
+
+vector<personal*> film::getPersonal()
+{
+	return this->pers;
+}
+
+void cinematograf::read(istream& input)
+{
+	input >> locatie;
+	input >> incasari;
+}
+
+void cinematograf::print(ostream& output)
+{
+	output << locatie <<"\n";
+	output << incasari <<"\n";
 }
 
 personal::personal(string nume, string cnp, string nume_film)
@@ -156,6 +192,12 @@ void actor::print(ostream& output)
 	output << "rol: "<<rol<<"\n";
 	output << "procentIncasari: "<<procentIncasari<<"\n";
 	output << "bonus: "<<bonus<<"\n";
+}
+
+bool actor::principal()
+{
+	if (this->rol == "principal") return 1;
+	return 0;
 }
 
 regizor::regizor(string nume, string cnp, string nume_film, int suma) :personal(nume,cnp,nume_film)
@@ -261,6 +303,18 @@ ostream& operator<<(ostream& output, film& F)
 	return output;
 }
 
+istream& operator>>(istream& input, cinematograf& C)
+{
+	C.read(input);
+	return input;
+}
+
+ostream& operator<<(ostream& output, cinematograf& C)
+{
+	C.print(output);
+	return output;
+}
+
 istream& operator>>(istream& input, actor& A)
 {
 	A.read(input);
@@ -296,3 +350,5 @@ ostream& operator<<(ostream& output, personalTehnic& P)
 	P.print(output);
 	return output;
 }
+
+

@@ -13,24 +13,15 @@ int main()
 	//cin >> F;
 	//cout << F;
 
-	actor A;
-	actor B("mihai", "1234123", "got", "principal", 5000);
-	regizor R("mihaita", "124514512", "got", 1000000);
-	personalTehnic P("mitza", "1244514", "got", "efecte speciale", 2);
-	cout << R;
-	cout << "\n";
-	cout << B;
-	cout << "\n";
+
 	//cin >> A;
 	//cout << A;
-	cout << P;
-	personal* p;
-	p = &R;
-	regizor *S;
-	S = (regizor*)p;
-	cout << *S;
-	freopen("personal.txt", "r", stdin);
-	cin >> F;
-	cout << F;
+
+	//freopen("personal.txt", "r", stdin);
+	firmaDistributie<unsigned> f;
+	f.read(cin);
+	cout << "-------------------";
+	f.print(cout);
+
 	return 0;
 }
